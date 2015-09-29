@@ -9,7 +9,7 @@ public class Main{
 		Scanner kybd = new Scanner(System.in);
 		
 		//File reading
-		System.out.println('Please provide a file location. Not entering anything will use input.txt')
+		System.out.println('Please provide a file location. Not entering anything will use input.txt');
 		fileLocation = kybd.next();
 		FileReader fileReader = new FileReader('input.txt');
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
