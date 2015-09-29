@@ -2,7 +2,7 @@ public interface codeWriter(){
 	private String code;
 	public codeWriter();
 	
-	public String classStart(String className, String security, String[] classType);
+	public String classStart(String className, String accessModifier, boolean isInterface, String classModifier[]);
 	public String classEnd();
 	public String toString();
 	//public String fieldInt(String fieldName, String security, int value, boolean getter, boolean setter, String[] dataType){

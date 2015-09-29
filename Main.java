@@ -36,7 +36,7 @@ public class Main{
 				break;
 		}
 		for(int i = 0; i<classList.classes.length-1;i++){
-			toWrite.classStart(classList.classes[i].className,classList.classes[i].accessModifier, classList.classes[i].classType);
+			toWrite.classStart(classList.classes[i].className,classList.classes[i].accessModifier, classList.classes[i].isInterface, classList.classes[i].classModifier);
 			toWrite.classEnd();
 		}
 		
