@@ -8,23 +8,23 @@ package codegen;
 
 
 
-public class CPlusPlusWriter implements codeWriter {
+public class CPlusPlusWriter implements CodeWriter {
     String code;
     
 	public CPlusPlusWriter(){
-		code='';
+		code="";
 	}
     
     public String classStart(String className, String accessModifier, boolean isAbstract, String[] classModifier){
             //For c++, if a class is supposed to be abstract, each field will have
             //the virtual keyword to denote it as such
 
-            output+=className+" ";
-            output+="{";
+            code += className+" ";
+            code += "{";
             if(accessModifier=="private"){
-                output+="private: \n";
+                code += "private: \n";
 			}else{
-			 	output+="public: \n";
+			 	code += "public: \n";
 			}
             return "success";
             
@@ -32,7 +32,7 @@ public class CPlusPlusWriter implements codeWriter {
     }
     
     public void classEnd(){
-        output+="}";
+        code += "}";
     }
 	public String getCode(){
 		return code;

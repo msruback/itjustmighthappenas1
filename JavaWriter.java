@@ -5,12 +5,17 @@
  */
 package codegen;
 
-public class JavaWriter implements codeWriter {
+public class JavaWriter implements CodeWriter{
 	private String code;
-	public String classStart(String className, String accessModifier, boolean isInterface, String classModifier){      
+	
+	public JavaWriter(){
+		code="";
+	}
+	
+	public String classStart(String className, String accessModifier, boolean isInterface, String[] classModifier){      
             code +=accessModifier+" ";
-			for(int i=0; i<=classModifier.length();i++){
-            	if(isInterface=true && classModifier=="final"){
+			for(int i=0; i<=classModifier.length-1;i++){
+            	if(isInterface=true && classModifier[i]=="final"){
                 	return "Error, Java interface cannot be final";
             	}else{
 					code += classModifier[i]+' ';
@@ -28,6 +33,7 @@ public class JavaWriter implements codeWriter {
     public void classEnd(){
         code+="}";
     }
+	
 	public String getCode(){
 		return code;
 	}

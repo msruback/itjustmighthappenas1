@@ -1,7 +1,6 @@
-public interface codeWriter{
-	private String code;
-	
-	public String classStart(String className, String accessModifier, boolean isInterface, String classModifier[]);
+package codegen;
+public interface CodeWriter{
+	public String classStart(String className, String accessModifier, boolean isInterface, String[] classModifier);
 	public void classEnd();
 	public String getCode();
 	//public String fieldInt(String fieldName, String security, int value, boolean getter, boolean setter, String[] dataType){
@@ -21,5 +20,4 @@ public interface codeWriter{
 	//public String fieldBoolean(String fieldName, String security, boolean value, boolean getter, boolean setter, String[] dataType){
 	//}
 	//public String fieldOther(String fieldName, String security, String value, boolean getter, boolean setter, String[] dataType, boolean isValid){
-	}
 }
