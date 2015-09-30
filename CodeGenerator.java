@@ -1,6 +1,9 @@
 import org.json.*;
 import java.io.*;
 
+//Wrote by Matthew Rubacky
+//Json library provided by www.json.org
+
 public class CodeGenerator{
 	public static void codeGenerator(String [] args){
 		String jsonPreParse, fileExtension, output;
