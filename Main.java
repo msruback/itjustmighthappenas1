@@ -1,17 +1,16 @@
 import org.json.*;
 import java.io.*;
 
-public class Main{
-	public static void main(String [] args){
-		String fileLocation, jsonPreParse, language;
+public class CodeGenerator{
+	public static void codeGenerator(String [] args){
+		String jsonPreParse, fileExtension, output;
 		JSONObject classList;
 		codeWriter toWrite;
 		Scanner kybd = new Scanner(System.in);
 		
 		//File reading
-		System.out.println('Please provide a file location. Not entering anything will use input.txt');
-		fileLocation = kybd.next();
-		FileReader fileReader = new FileReader('input.txt');
+		
+		FileReader fileReader = new FileReader('//input//'+args[0]+'.txt');
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		
 		while(bufferedReader.ready()){
@@ -22,23 +21,26 @@ public class Main{
 		//JSON parsing
 		classList = new JSONObject(jsonPreParse);
 		
-		//Code Writing
-		do{
-		System.out.println('Please choose a language. Possible Options are Java, and C++');
-		language = kybd.next();
-		}while(language.equalsIgnoreCase('java')||language.equalsIgnoreCase('c++'));
-		switch(language.toLower()){
+		//Language switching
+		switch(args[1].toLower()){
 			case 'java':
-				toWrite = new javaWriter();
+				toWrite = new JavaWriter();
+				fileExtension = '.java';
 				break;
 			case 'c++':
-				toWrite = new cPlusPlusWriter();
+				toWrite = new CPlusPlusWriter();
+				fileExtension = '.cpp'
 				break;
 		}
+		//Code Writing
 		for(int i = 0; i<classList.classes.length-1;i++){
 			toWrite.classStart(classList.classes[i].className,classList.classes[i].accessModifier, classList.classes[i].isInterface, classList.classes[i].classModifier);
 			toWrite.classEnd();
 		}
-		
+		//Writing to file
+		String output = toWrite.toString();
+		FileWriter fileWriter = new FileWriter('//input//'+args[0]+fileExtension);
+		fileWriter.write(output);
+		fileWriter.close();
 	}
 }
