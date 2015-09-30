@@ -1,10 +1,9 @@
-public interface codeWriter(){
+public interface codeWriter{
 	private String code;
-	public codeWriter();
 	
 	public String classStart(String className, String accessModifier, boolean isInterface, String classModifier[]);
-	public String classEnd();
-	public String toString();
+	public void classEnd();
+	public String getCode();
 	//public String fieldInt(String fieldName, String security, int value, boolean getter, boolean setter, String[] dataType){
 	//}
 	//public String fieldDouble(String fieldName, String security, double value, boolean getter, boolean setter, String[] dataType){

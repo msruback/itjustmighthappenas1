@@ -1,7 +1,7 @@
 import org.json.*;
 import java.io.*;
 
-//Wrote by Matthew Rubacky
+//Written by Matthew Rubacky
 //Json library provided by www.json.org
 
 public class CodeGenerator{
