@@ -28,5 +28,5 @@ public interface CodeWriter{
 		public String addField(String fieldType, String fieldName, String accessModifier, boolean getter, boolean setter, String[] fieldModifier);
 	//Method Method
 		//Writes a method
-		public String addMethod(String ReturnType, String methodName, String accessModifier, JSONObject parameters);
+		public String addMethod(String returnType, String methodName, String accessModifier, JSONObject parameters, String[] methodModifier);
 }
