@@ -1,23 +1,32 @@
 package codegen;
 public interface CodeWriter{
-	public String classStart(String className, String accessModifier, boolean isInterface, String[] classModifier);
-	public void classEnd();
-	public String getCode();
-	//public String fieldInt(String fieldName, String security, int value, boolean getter, boolean setter, String[] dataType){
-	//}
-	//public String fieldDouble(String fieldName, String security, double value, boolean getter, boolean setter, String[] dataType){
-	//}
-	//public String fieldLong(String fieldName, String security, long value, boolean getter, boolean setter, String[] dataType){
-	//}
-	//public String fieldShort(String fieldName, String security, short value, boolean getter, boolean setter, String[] dataType){
-	//}
-	//public String fieldFloat(String fieldName, String security, float value, boolean getter, boolean setter, String[] dataType){
-	//}
-	//public String fieldString(String fieldName, String security, String value, boolean getter, boolean setter, String[] dataType){
-	//}
-	//public String fieldChar(String fieldName, String security, char value, boolean getter, boolean setter, String[] dataType){
-	//}
-	//public String fieldBoolean(String fieldName, String security, boolean value, boolean getter, boolean setter, String[] dataType){
-	//}
-	//public String fieldOther(String fieldName, String security, String value, boolean getter, boolean setter, String[] dataType, boolean isValid){
+	//Utility Methods
+		//Returns Code
+		public String getCode();
+		//Returns whether or not the passed string is a valid name
+		public boolean isValidName(String toCheck);
+		//Returns whether or not the passed	string is a valid access modifier
+		public boolean isValidAccess(String toCheck);
+		//Returns whether or not the passed string is a valid modifier
+		public boolean isValidModifier(String toCheck);
+		//Returns whether or not the passed string is a valid type
+		public boolean isValidType(String toCheck);
+	//Class Methods
+		//Writes the class header and adds a constructor if needed, Returns an error message if data passed is not valid
+		public String classStart(String className, String accessModifier, boolean isInterface, String[] classModifier);
+		//Ends the class, for example, in java this will add a }
+		public void classEnd();
+		//Constructor Methods
+			//Write a copy constructor
+			public String copyConstructor(String className);
+			//Write a default constructor
+			public String defaultConstructor(String className);
+			//Write a fully intializing constructor
+			public String fullConstructor(String className,JSONObject fields);
+	//Field Method
+		//Writes a field
+		public String addField(String fieldType, String fieldName, String accessModifier, boolean getter, boolean setter, String[] fieldModifier);
+	//Method Method
+		//Writes a method
+		public String addMethod(String ReturnType, String methodName, String accessModifier, JSONObject parameters);
 }

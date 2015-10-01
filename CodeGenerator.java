@@ -38,6 +38,7 @@ public class CodeGenerator{
 				fileExtension = ".txt";
 		} else {
 				toWrite = null;
+				System.err.println("Language not supported");
 		}
 		//Code Writing
 		if(toWrite == null){
