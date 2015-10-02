@@ -77,11 +77,11 @@ public class CodeGenerator{
 						if(currentClass.has("constructors") && !currentClass.getString("constructor[0]").equalsIgnoreCase("none")){
 							for(int k = 0; k<=currentClass.getJSONArray("constructors").length()-1;k++){
 								if(currentClass.getString("constructor["+k+"]").equalsIgnoreCase("default")){
-									isError(toWrite.defaultConstructor(currentClass.getString("className")));
+									isError(toWrite.defaultConstructor(currentClass.getString("className"),currentClass.getJSONArray("fields"),classList.getJSONArray("classes"));
 								}else if(currentClass.getString("constructor["+k+"]").equalsIgnoreCase("copy")){
 									isError(toWrite.copyConstructor(currentClass.getString("className")));
 								}else if(currentClass.getString("constructor["+k+"]").equalsIgnoreCase("full")){
-									isError(toWrite.fullConstructor(currentClass.getString("className"),currentClass.get("fields")));
+									isError(toWrite.fullConstructor(currentClass.getString("className"),currentClass.getJSONArray("fields"),classList.getJSONArray("classes"));
 								}
 							}
 						}
@@ -93,7 +93,7 @@ public class CodeGenerator{
 								currentField = currentClass.get("fields["j"]");
 								if(currentField.has("fieldName") && toWrite.isValidName(currentField.getString("fieldName")) && currentField.has("filedType")){
 									for(int = k; k<classList.getJSONArray("classes").length()-1;k++){
-										if(currentField.getString("fieldType").equalsIgnoreCase(classList.getString("classes["+k+"].className"))){
+										if(currentField.getString("fieldType").equals(classList.getString("classes["+k+"].className"))){
 											isValidType = true;
 										}
 									}
@@ -144,7 +144,7 @@ public class CodeGenerator{
 								currentMethod = currentClass.get("method["j"]");
 								if(currentMethod.has("methodName") && toWrite.isValidName(currentMethod.getString("methodName")) && currentMethod.has("methodType")){
 									for(int = k; k<classList.getJSONArray("classes").length()-1;k++){
-										if(currentMethod.getString("methodType").equalsIgnoreCase(classList.getString("classes["+k+"].className"))){
+										if(currentMethod.getString("methodType").equals(classList.getString("classes["+k+"].className"))){
 											isValidType = true;
 										}
 									}

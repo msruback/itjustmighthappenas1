@@ -18,15 +18,15 @@ public interface CodeWriter{
 		public void classEnd();
 		//Constructor Methods
 			//Write a copy constructor
-			public String copyConstructor(String className);
+			public String copyConstructor(String className,JSONArray fields,JSONArray classes);
 			//Write a default constructor
 			public String defaultConstructor(String className);
 			//Write a fully intializing constructor
-			public String fullConstructor(String className,JSONObject fields);
+			public String fullConstructor(String className,JSONArray fields,JSONArray classes);
 	//Field Method
 		//Writes a field
 		public String addField(String fieldType, String fieldName, String accessModifier, boolean getter, boolean setter, String[] fieldModifier);
 	//Method Method
 		//Writes a method
-		public String addMethod(String returnType, String methodName, String accessModifier, JSONObject parameters, String[] methodModifier);
+		public String addMethod(String returnType, String methodName, String accessModifier, JSONArray parameters, JSONArray classes, String[] methodModifier);
 }
