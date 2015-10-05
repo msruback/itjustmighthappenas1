@@ -21,7 +21,7 @@ public interface CodeWriter{
 			public String copyConstructor(String className,JSONArray fields,JSONArray classes);
 			//Write a default constructor
 			public String defaultConstructor(String className);
-			//Write a fully intializing constructor
+			//Write a fully initializing constructor
 			public String fullConstructor(String className,JSONArray fields,JSONArray classes);
 	//Field Method
 		//Writes a field
