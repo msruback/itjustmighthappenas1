@@ -2,7 +2,7 @@
 
 package codegen;
 import java.util.regex.*;
-import org.json.*
+import org.json.*;
 
 public class PseudoWriter implements CodeWriter{
 	private String code, functions;
@@ -19,7 +19,7 @@ public class PseudoWriter implements CodeWriter{
 		};
 	
 		public boolean isValidName(String toCheck){
-			Pattern validName = Pattern.compile("\w*");
+			Pattern validName = Pattern.compile("\\w*");
 			if(validName.matcher("toCheck").matches()){
 				return true;
 			}else{
@@ -28,7 +28,7 @@ public class PseudoWriter implements CodeWriter{
 		}
 	
 		public boolean isValidAccess(String toCheck){
-			Pattern validName = Pattern.compile("\w*");
+			Pattern validName = Pattern.compile("\\w*");
 			if(validName.matcher("toCheck").matches()){
 				return true;
 			}else{
@@ -37,7 +37,7 @@ public class PseudoWriter implements CodeWriter{
 		}
 	
 		public boolean isValidModifier(String toCheck){
-			Pattern validName = Pattern.compile("\w*");
+			Pattern validName = Pattern.compile("\\w*");
 			if(validName.matcher("toCheck").matches()){
 				return true;
 			}else{
@@ -46,7 +46,7 @@ public class PseudoWriter implements CodeWriter{
 		}
 	
 		public boolean isValidType(String toCheck){
-			Pattern validName = Pattern.compile("\w*");
+			Pattern validName = Pattern.compile("\\w*");
 			if(validName.matcher("toCheck").matches()){
 				return true;
 			}else{
@@ -154,7 +154,7 @@ public class PseudoWriter implements CodeWriter{
 			return "success";
 		}
 	//Methods
-		public String addMethod(String returnType, String methodName, String accessModifier, JSONArray parameters,JSONArray classes String[] methodModifier){
+		public String addMethod(String returnType, String methodName, String accessModifier, JSONArray parameters,JSONArray classes, String[] methodModifier){
 			JSONObject currentParam;
 			boolean isValidType;
 			code += accessModifier+" ";
@@ -172,7 +172,6 @@ public class PseudoWriter implements CodeWriter{
 						if(currentParam.getString("fieldType").equals(classes.getJSONObject(j).getString("className"))){
 							isValidType = true;
 						}
-						}	
 					}
 					if(isValidType){
 						if(this.isValidName(currentParam.getString("fieldName"))){
@@ -181,7 +180,7 @@ public class PseudoWriter implements CodeWriter{
 					}
 				}
 			}
-			code +="){\n}";
+			code += "){\n}";
 			return "success";
 		}
 }
