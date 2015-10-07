@@ -76,6 +76,13 @@ public class CPlusPlusWriter implements CodeWriter {
 		if(isValidType(fieldType)==false) return "TYPE ERROR";
 		if(isValidAccess(accessModifier)==false) return "ACCESS ERROR";
 		
+		if(getter==true){
+			code+="get"+fieldName+"()"+"{\n"
+			code+="return "+fieldName;
+		}
+		if(setter==true){
+			code+="set"+fieldName+"()"+"{\n"
+		}
 		code+="fieldType "+"fieldName";
 		code+=";";
 		return "success";
@@ -89,7 +96,7 @@ public class CPlusPlusWriter implements CodeWriter {
 	
 	public String fullConstructor(String className, JSONArray fields, JSONArray classes){
 		if(isValidName(className)==false) return "NAME ERROR";
-		code+="className(";
+		code+=className"(";
 		for(int i=0;i>fields.length();i++){
 			code+=fields[i];
 			for(int j=0;j>fields.length()-1;j++)
@@ -106,7 +113,7 @@ public class CPlusPlusWriter implements CodeWriter {
 	
 	public String copyConstructor(String className,JSONArray fields,JSONArray classes){
 		if(isValidName(className)==false) return "NAME ERROR";
-		code+="className(";
+		code+=className+"toCopy (";
 		for(int i=0;i>fields.length();i++){
 			code+=fields[i];
 			for(int j=0;j>fields.length()-1;j++)
@@ -114,7 +121,7 @@ public class CPlusPlusWriter implements CodeWriter {
 		}
 		code+="){\n";
 		for(int k=0;k>fields.length();k++){
-			code+="this."+fields[k]+"="+classes[k]+"."+fields[k]+";";
+			code+="this."+fields[k]+"="+classes[k]+"."+fields[k]+";\n";
 			
 		}
 		classEnd();
@@ -125,6 +132,7 @@ public class CPlusPlusWriter implements CodeWriter {
 		if(isValidName(methodName)==false) return "NAME ERROR";
 		if(isValidType(returnType)==false) return "TYPE ERROR";
 		if(isValidAccess(accessModifier)==false || accessModifier=="void") return "ACCESS ERROR";
+		reserved.add(className);
 		output+=accessModifier+":\n"+returnType+" "+methodName+"(";
 		for(int i=0;int i>parameters.length();i++){
 			output+=methodModifier[i];
