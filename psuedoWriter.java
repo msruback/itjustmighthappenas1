@@ -91,7 +91,7 @@ public class PseudoWriter implements CodeWriter{
 							if(currentField.getString("fieldType").equals(classes.getJSONObject(j).getString("className"))){
 								isValidType = true;
 							}
-						}	
+						}
 					}
 					if(isValidType){
 						if(this.isValidName(currentField.getString("fieldName"))){
