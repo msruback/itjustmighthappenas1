@@ -1,0 +1,22 @@
+{
+	"classes":[
+		{
+		"className":"exampleClass",
+		"accessModifier":"public",
+		"isInterface":false,
+		"classModifier":["test"],
+		"fields":[
+			{
+			"fieldName":"exampleField",
+			"fieldType":"int",
+			"accessModifier":"public",
+			},
+			{
+			"fieldName":"otherExample",
+			"fieldType":"String",
+			"accessModifier":"private",
+			}
+		]		
+		}
+	]
+}

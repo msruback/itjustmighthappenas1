@@ -1,0 +1,8 @@
+{
+"classes":[
+{
+"className":"exampleClass",
+"accessModifier":"public"
+}
+]
+}

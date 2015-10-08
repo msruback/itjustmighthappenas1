@@ -14,7 +14,7 @@ public class PseudoWriter implements CodeWriter{
 			functions = "";
 		};
 	
-		public String getCode(){
+		public String getCode(){		
 			return code;
 		};
 	
@@ -64,9 +64,9 @@ public class PseudoWriter implements CodeWriter{
 			if(isInterface){
 				code += "interface ";
 			} else {
-				code += "class";
+				code += "class ";
 			}
-			code += className + "{\n";
+			code += className + "{\n\n";
 			return "success";
 		};
 		
@@ -87,7 +87,7 @@ public class PseudoWriter implements CodeWriter{
 					if(this.isValidType(currentField.getString("fieldType"))){
 						isValidType = true;
 					}else{
-						for(int j=0;j<=classes.length;j++){
+						for(int j=0;j<=classes.length();j++){
 							if(currentField.getString("fieldType").equals(classes.getJSONObject(j).getString("className"))){
 								isValidType = true;
 							}
@@ -99,12 +99,12 @@ public class PseudoWriter implements CodeWriter{
 						}
 					}
 				}
-				functions += "}\n";
+				functions += "}\n\n";
 				return "success";
 			}
 		
 			public String defaultConstructor(String className){
-				functions+="public "+className+"(){\n}";
+				functions+="public "+className+"();\n\n";
 				return "success";
 			}
 		
@@ -119,7 +119,7 @@ public class PseudoWriter implements CodeWriter{
 					if(this.isValidType(currentField.getString("fieldType"))){
 						isValidType = true;
 					}else{
-						for(int j=0;j<=classes.length;j++){
+						for(int j=0;j<=classes.length();j++){
 							if(currentField.getString("fieldType").equals(classes.getJSONObject(j).getString("className"))){
 								isValidType = true;
 							}
@@ -127,12 +127,15 @@ public class PseudoWriter implements CodeWriter{
 					}
 					if(isValidType){
 						if(this.isValidName(currentField.getString("fieldName"))){
-							functions += " "+currentField.getString("fieldType")+" set"+currentField.getString("fieldName").subString(0,0).toUpperCase()+currentField.getString("fieldName").subString(1);
-							setting += currentField.getString("fieldName")+" = toCopy."+currentField.getString("fieldName")+";\n";
+							functions += currentField.getString("fieldType")+" set"+currentField.getString("fieldName");
+							if((i+1)<fields.length()){
+								functions +=", ";
+							}
+							setting += currentField.getString("fieldName")+" = set"+currentField.getString("fieldName")+";\n";
 						}
 					}
 				}
-				functions += setting+"}\n";
+				functions +="){\n"+ setting+"}\n\n";
 				return "success";
 			}
 		
@@ -142,14 +145,14 @@ public class PseudoWriter implements CodeWriter{
 			for (int i=0; i<=fieldModifier.length-1;i++){
 				code += fieldModifier[i]+" ";
 			}
-			code += fieldName;
+			code += fieldName+";\n\n";
 			if(getter){
-				functions += "public" + fieldType + " get" +fieldName.subString(0,0).toUpperCase()+fieldName.subString(1)+"(){\n";
-				functions += "return "+fieldName+";\n}\n";
+				functions += "public " + fieldType + " get" +fieldName+"(){\n";
+				functions += "return "+fieldName+";\n}\n\n";
 			}
 			if(setter){
-				functions += "public void set" +fieldName.subString(0,0).toUpperCase()+fieldName.subString(1)+"("+fieldType+" toSet){\n";
-				functions += fieldName+" = toSet;\n}\n";
+				functions += "public void set" +fieldName+"("+fieldType+" toSet){\n";
+				functions += fieldName+" = toSet;\n}\n\n";
 			}
 			return "success";
 		}
@@ -157,30 +160,30 @@ public class PseudoWriter implements CodeWriter{
 		public String addMethod(String returnType, String methodName, String accessModifier, JSONArray parameters,JSONArray classes, String[] methodModifier){
 			JSONObject currentParam;
 			boolean isValidType;
-			code += accessModifier+" ";
+			functions += accessModifier+" ";
 			for (int i=0; i<=methodModifier.length-1;i++){
-				code += methodModifier[i]+" ";
+				functions += methodModifier[i]+" ";
 			}
-			code += returnType + " " + methodName + "(";
-			for (int i=0; i<=parameters.length();i++){
+			functions += returnType + " " + methodName + "(";
+			for (int i=0; i<=parameters.length()-1;i++){
 				currentParam = parameters.getJSONObject(i);
 				isValidType = false;
 				if(this.isValidType(currentParam.getString("fieldType"))){
 					isValidType = true;
 				}else{
-					for(int j=0;j<=classes.length;j++){
+					for(int j=0;j<=classes.length();j++){
 						if(currentParam.getString("fieldType").equals(classes.getJSONObject(j).getString("className"))){
 							isValidType = true;
 						}
 					}
 					if(isValidType){
 						if(this.isValidName(currentParam.getString("fieldName"))){
-							code += fieldType + " " + fieldName + ", ";
+							functions += currentParam.getString("fieldType") + " " + currentParam.getString("fieldName") + ", ";
 						}
 					}
 				}
 			}
-			code += "){\n}";
-			return "success";
+			functions += ");\n\n";
+			return functions;
 		}
 }

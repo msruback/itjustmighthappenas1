@@ -1,0 +1,42 @@
+
+public test class exampleClass{
+
+public exampleField;
+
+private otherExampleField;
+
+
+public exampleClass();
+
+public exampleClass(int setexampleField, String setotherExampleField){
+exampleField = setexampleField;
+otherExampleField = setotherExampleField;
+}
+
+public exampleClass(exampleClass toCopy){
+exampleField = toCopy.exampleField;
+otherExampleField = toCopy.otherExampleField;
+}
+
+public int getexampleField(){
+return exampleField;
+}
+
+public void setexampleField(int toSet){
+exampleField = toSet;
+}
+
+public String getotherExampleField(){
+return otherExampleField;
+}
+
+public void setotherExampleField(String toSet){
+otherExampleField = toSet;
+}
+
+public int exampleFunction();
+
+private String otherExampleFunction();
+
+
+}

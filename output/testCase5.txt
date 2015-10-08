@@ -1,0 +1,14 @@
+
+public test class exampleClass{
+
+public exampleField;
+
+private otherExampleField;
+
+
+public int exampleFunction();
+
+private String otherExampleFunction();
+
+
+}

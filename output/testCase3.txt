@@ -1,0 +1,10 @@
+
+public test class exampleClass{
+
+public exampleField;
+
+private otherExample;
+
+
+
+}

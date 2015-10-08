@@ -1,0 +1,34 @@
+{
+	"classes":[
+		{
+		"className":"exampleClass",
+		"accessModifier":"public",
+		"isInterface":false,
+		"classModifier":["test"],
+		"fields":[
+			{
+			"fieldName":"exampleField",
+			"fieldType":"int",
+			"accessModifier":"public",
+			},
+			{
+			"fieldName":"otherExampleField",
+			"fieldType":"String",
+			"accessModifier":"private",
+			}
+		],
+		"methods":[
+			{
+			"methodName":"exampleFunction",
+			"methodType":"int",
+			"accessModifier":"public"
+			},
+			{
+			"methodName":"otherExampleFunction",
+			"methodType":"String",
+			"accessModifier":"private"
+			}
+		]		
+		}
+	]
+}

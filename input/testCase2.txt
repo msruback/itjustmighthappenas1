@@ -1,0 +1,10 @@
+{
+	"classes":[
+		{
+		"className":"exampleClass",
+		"accessModifier":"public",
+		"isInterface":false,
+		"classModifier":["test"],		
+		}
+	]
+}

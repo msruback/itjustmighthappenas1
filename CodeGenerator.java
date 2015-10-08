@@ -5,21 +5,21 @@ import java.io.*;
 //Written by Matthew Rubacky
 //Json library provided by www.json.org
 public class CodeGenerator{
-	public void isSuccess(String errorString){
-		if(!errorString.equals("success")){
+	public static void isError(String errorString){
 			System.err.println(errorString);
-		}
 	}
-	public static void codeGenerator(String [] args){
+	public static void main(String [] args){
 		String jsonPreParse="", fileExtension="", output;
 		String[] modifierArray;
-		JSONObject classList;
+		JSONObject input;
+		JSONArray classArray;
 		CodeWriter toWrite;
 		boolean isInterface;
 		
 		//File reading
 		try{
-		FileReader fileReader = new FileReader("//input//"+args[0]+".txt");
+		System.out.println(args[0]);
+		FileReader fileReader = new FileReader(".//codegen//input//"+args[0]+".txt");
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 			while(bufferedReader.ready()){
 				jsonPreParse += bufferedReader.readLine();
@@ -28,18 +28,19 @@ public class CodeGenerator{
 		}catch(java.io.IOException e){
 			System.err.println("File could not be read");
 		}
-		
+		System.out.println(jsonPreParse);
 		//JSON parsing
-		classList = new JSONObject(jsonPreParse);
+		input = new JSONObject(jsonPreParse);
 		
 		//Language switching
-		if(args[1].equalsIgnoreCase("java")){
-				toWrite = new JavaWriter();
-				fileExtension = ".java";
-		} else if(args[1].equalsIgnoreCase("c++")){
-				toWrite = new CPlusPlusWriter();
-				fileExtension = ".cpp";
-		} else if(args[1].equalsIgnoreCase("pseudo")){
+		//if(args[1].equalsIgnoreCase("java")){
+				//toWrite = new JavaWriter();
+				//fileExtension = ".java";
+		//} else if(args[1].equalsIgnoreCase("c++")){
+				//toWrite = new CPlusPlusWriter();
+				//fileExtension = ".cpp";
+		//} else 
+		if(args[1].equalsIgnoreCase("pseudo")){
 				toWrite = new PseudoWriter();
 				fileExtension = ".txt";
 		} else {
@@ -47,21 +48,25 @@ public class CodeGenerator{
 				isError("Error: Language not supported");
 		}
 		//Code Writing
-		if(toWrite != null && classList.has("classes")){
+		if(toWrite != null && input.has("classes")){
+			classArray = input.getJSONArray("classes");
 			JSONObject currentClass,currentField,currentMethod;
+			JSONArray modifierJSONArray,constructorArray,fieldsArray,methodArray,parameters;
 			boolean isValidType, getter, setter;
 			String accessModifier;
-			for(int i = 0; i<classList.getJSONArray("classes").length()-1;i++){
-				currentClass = classList.get("classes["+i+"]");
+			for(int i = 0; i<=classArray.length()-1;i++){
+				System.out.println("On Class "+(i+1));
+				currentClass = classArray.getJSONObject(i);
 				//Check for properly formated class name and access modifier
 				if(currentClass.has("className") && currentClass.has("accessModifier")){
-					if(toWrite.isValidName(currentClass.getString("className")) && toWrite.isValidAccess(currentClass.getString("accessModifier"){
+					if(toWrite.isValidName(currentClass.getString("className")) && toWrite.isValidAccess(currentClass.getString("accessModifier"))){
 						//handling classModifiers
 						if(currentClass.has("classModifier")){
-							modifierArray = new String[currentClass.getJSONArray("classModifier").length()];
-							for(int k = 0;k<=currentClass.getJSONArray("classModifier").length()-1;k++){
-								if(toWrite.isValidModifier(currentClass.getString("classModifier["+k+"]"))){
-									modifierArray[k] = currentClass.getString("classModifier["+k+"]");
+							modifierJSONArray = currentClass.getJSONArray("classModifier");
+							modifierArray = new String[modifierJSONArray.length()];
+							for(int k = 0;k<=modifierJSONArray.length()-1;k++){
+								if(toWrite.isValidModifier(modifierJSONArray.getString(k))){
+									modifierArray[k] = modifierJSONArray.getString(k);
 								}
 							}
 						}else{
@@ -74,47 +79,51 @@ public class CodeGenerator{
 							isInterface = false;
 						}
 						//handling constructors
-						if(currentClass.has("constructors") && !currentClass.getString("constructor[0]").equalsIgnoreCase("none")){
-							for(int k = 0; k<=currentClass.getJSONArray("constructors").length()-1;k++){
-								if(currentClass.getString("constructor["+k+"]").equalsIgnoreCase("default")){
-									isError(toWrite.defaultConstructor(currentClass.getString("className"),currentClass.getJSONArray("fields"),classList.getJSONArray("classes"));
-								}else if(currentClass.getString("constructor["+k+"]").equalsIgnoreCase("copy")){
-									isError(toWrite.copyConstructor(currentClass.getString("className")));
-								}else if(currentClass.getString("constructor["+k+"]").equalsIgnoreCase("full")){
-									isError(toWrite.fullConstructor(currentClass.getString("className"),currentClass.getJSONArray("fields"),classList.getJSONArray("classes"));
+						if(currentClass.has("constructors")){
+							constructorArray = currentClass.getJSONArray("constructors");
+						 	if(!constructorArray.getString(0).equalsIgnoreCase("none")){
+								for(int k = 0; k<=constructorArray.length()-1;k++){
+									if(constructorArray.getString(k).equalsIgnoreCase("copy")){
+										isError(toWrite.copyConstructor(currentClass.getString("className"),currentClass.getJSONArray("fields"),classArray));
+									}else if(constructorArray.getString(k).equalsIgnoreCase("default")){
+										isError(toWrite.defaultConstructor(currentClass.getString("className")));
+									}else if(constructorArray.getString(k).equalsIgnoreCase("full")){
+										isError(toWrite.fullConstructor(currentClass.getString("className"),currentClass.getJSONArray("fields"),classArray));
+									}
 								}
 							}
 						}
 						isError(toWrite.classStart(currentClass.getString("className"),currentClass.getString("accessModifier"), isInterface, modifierArray));
 						//fields
 						if(currentClass.has("fields")){
-							for(int j = 0; j<currentClass.getJSONArray("fields").length()-1;j++){
+							fieldsArray=currentClass.getJSONArray("fields");
+							for(int j = 0; j<=fieldsArray.length()-1;j++){
 								isValidType = false;
-								currentField = currentClass.get("fields["j"]");
-								if(currentField.has("fieldName") && toWrite.isValidName(currentField.getString("fieldName")) && currentField.has("filedType")){
-									for(int = k; k<classList.getJSONArray("classes").length()-1;k++){
-										if(currentField.getString("fieldType").equals(classList.getString("classes["+k+"].className"))){
+								currentField = fieldsArray.getJSONObject(j);
+								if(currentField.has("fieldName") && toWrite.isValidName(currentField.getString("fieldName")) && currentField.has("fieldType")){
+									for(int k = 0; k<=classArray.length()-1;k++){
+										if(currentField.getString("fieldType").equals(classArray.getJSONObject(k).getString("className"))){
 											isValidType = true;
 										}
 									}
-									if(!isValidType && isValidType(currentField.getString("fieldType"))){
+									if(!isValidType && toWrite.isValidType(currentField.getString("fieldType"))){
 										isValidType = true;
 									}
 									if(isValidType = true){
 										//handling Access Modifier
-										if(currentField.has("accessModifier"){
+										accessModifier = "";
+										if(currentField.has("accessModifier")){
 											if(toWrite.isValidAccess(currentField.getString("accessModifier"))){
 												accessModifier = currentField.getString("accessModifier");
-											}else{
-												accessModifier = "";
 											}
 										}
 										//handling fieldModifier
 										if(currentField.has("fieldModifier")){
-											modifierArray = new String[currentField.getJSONArray("fieldModifier").length()];
-											for(int k = 0;k<=currentField.getJSONArray("fieldModifier").length()-1;k++){
-												if(toWrite.isValidModifier(currentField.getString("fieldModifier["+k+"]"))){
-													modifierArray[k] = currentField.getString("fieldModifier["+k+"]");
+											modifierJSONArray = currentField.getJSONArray("fieldModifier");
+											modifierArray = new String[modifierJSONArray.length()];
+											for(int k = 0;k<=modifierJSONArray.length()-1;k++){
+												if(toWrite.isValidModifier(modifierJSONArray.getString(k))){
+													modifierArray[k] = modifierJSONArray.getString(k);
 												}
 											}
 										}else{
@@ -132,58 +141,67 @@ public class CodeGenerator{
 										}else{
 											setter = false;
 										}
-										isError(toWrite.addField(currentField.getString("fieldType"), currentField.getString("fieldName"), accessModifier, getter, setter, modifierArray))
+										isError(toWrite.addField(currentField.getString("fieldType"), currentField.getString("fieldName"), accessModifier, getter, setter, modifierArray));
 									}
 								}
 							}
 						}
 						//methods
 						if(currentClass.has("methods")){
-							for(int j = 0; j<currentClass.getJSONArray("methods").length()-1;j++){
+							methodArray=currentClass.getJSONArray("methods");
+							for(int j = 0; j<=methodArray.length()-1;j++){
+								System.out.println("Method"+(j+1));
 								isValidType = false;
-								currentMethod = currentClass.get("method["j"]");
+								currentMethod = methodArray.getJSONObject(j);
 								if(currentMethod.has("methodName") && toWrite.isValidName(currentMethod.getString("methodName")) && currentMethod.has("methodType")){
-									for(int = k; k<classList.getJSONArray("classes").length()-1;k++){
-										if(currentMethod.getString("methodType").equals(classList.getString("classes["+k+"].className"))){
+									for(int k = 0; k<=classArray.length()-1;k++){
+										if(currentMethod.getString("methodType").equals(classArray.getJSONObject(k).getString("className"))){
 											isValidType = true;
 										}
 									}
-									if(!isValidType && isValidType(currentMethod.getString("methodType"))){
+									if(!isValidType && toWrite.isValidType(currentMethod.getString("methodType"))){
 										isValidType = true;
 									}
 									if(isValidType = true){
 										//handling Access Modifier
-										if(currentMethod.has("accessModifier"){
+										accessModifier = "";
+										if(currentMethod.has("accessModifier")){
 											if(toWrite.isValidAccess(currentMethod.getString("accessModifier"))){
 												accessModifier = currentMethod.getString("accessModifier");
-											}else{
-												accessModifier = "";
 											}
 										}
 										//handling fieldModifier
 										if(currentMethod.has("methodModifier")){
-											modifierArray = new String[currentMethod.getJSONArray("methodModifier").length()];
-											for(int k = 0;k<=currentMethod.getJSONArray("methodModifier").length()-1;k++){
-												if(toWrite.isValidModifier(currentMethod.getString("methodModifier["+k+"]"))){
-													modifierArray[k] = currentMethod.getString("methodModifier["+k+"]");
+											modifierJSONArray = currentMethod.getJSONArray("methodModifier");
+											modifierArray = new String[modifierJSONArray.length()];
+											for(int k = 0;k<=modifierJSONArray.length()-1;k++){
+												if(toWrite.isValidModifier(modifierJSONArray.getString(k))){
+													modifierArray[k] = modifierJSONArray.getString(k);
 												}
 											}
 										}else{
 											modifierArray = new String[0];
 										}
-										isError(toWrite.addMethod(currentMethod.getString("methodType"), currentMethod.getString("methodName"), accessModifier, currentMethod.getJSONObject("parameters"), modifierArray))
+										if(currentMethod.has("parameters")){
+											parameters = currentMethod.getJSONArray("parameters");
+										}else{
+											parameters = new JSONArray();
+										}
+										isError(toWrite.addMethod(currentMethod.getString("methodType"), currentMethod.getString("methodName"), accessModifier, parameters, classArray, modifierArray));
 									}
 								}
 							}
 						}
-						toWrite.classEnd();
 					}
 				}
+				toWrite.classEnd();
 			}
 			//Writing to file
-			output = toWrite.toString();
+			output = toWrite.getCode();
 			try{
-			FileWriter fileWriter = new FileWriter("//input//"+args[0]+fileExtension);
+			File file = new File (".//codegen//output//"+args[0]+fileExtension);
+			System.out.println(output);
+			FileWriter fileWriter = new FileWriter(file);
 			fileWriter.write(output);
 			fileWriter.close();
 			}catch(java.io.IOException e){
