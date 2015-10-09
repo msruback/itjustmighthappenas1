@@ -27,7 +27,7 @@ public class CodeGenerator{
 			}
 			bufferedReader.close();
 		}catch(java.io.IOException e){
-			isError("Error: File could not be read");
+			isError("Error: File could not be read or is missing.");
 		}
 		//JSON parsing
 		input = new JSONObject(jsonPreParse);
@@ -44,7 +44,7 @@ public class CodeGenerator{
 				fileExtension = ".txt";
 		} else {
 				toWrite = null;
-				isError("Error: Language not supported");
+				isError("Error: Language not supported.");
 		}
 		//Code Writing
 		if(toWrite != null && input.has("classes")){
