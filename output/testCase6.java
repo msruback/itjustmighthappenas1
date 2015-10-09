@@ -1,22 +1,9 @@
 
-public test class exampleClass{
-
+public null classexampleClass{
 public int exampleField;
 
 private String otherExampleField;
 
-
-public exampleClass();
-
-public exampleClass(int setexampleField, String setotherExampleField){
-exampleField = setexampleField;
-otherExampleField = setotherExampleField;
-}
-
-public exampleClass(exampleClass toCopy){
-exampleField = toCopy.exampleField;
-otherExampleField = toCopy.otherExampleField;
-}
 
 public int getexampleField(){
 return exampleField;
