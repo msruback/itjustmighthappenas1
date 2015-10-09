@@ -6,7 +6,9 @@ import java.io.*;
 //Json library provided by www.json.org
 public class CodeGenerator{
 	public static void isError(String errorString){
-			System.err.println(errorString);
+			if(!errorString.equals("success"){
+				System.err.println(errorString);
+			}
 	}
 	public static void main(String [] args){
 		String jsonPreParse="", fileExtension="", output;
@@ -18,7 +20,6 @@ public class CodeGenerator{
 		
 		//File reading
 		try{
-		System.out.println(args[0]);
 		FileReader fileReader = new FileReader(".//codegen//input//"+args[0]+".txt");
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 			while(bufferedReader.ready()){
@@ -26,21 +27,19 @@ public class CodeGenerator{
 			}
 			bufferedReader.close();
 		}catch(java.io.IOException e){
-			System.err.println("File could not be read");
+			isError("Error: File could not be read");
 		}
-		System.out.println(jsonPreParse);
 		//JSON parsing
 		input = new JSONObject(jsonPreParse);
 		
 		//Language switching
-		//if(args[1].equalsIgnoreCase("java")){
-				//toWrite = new JavaWriter();
-				//fileExtension = ".java";
-		//} else if(args[1].equalsIgnoreCase("c++")){
-				//toWrite = new CPlusPlusWriter();
-				//fileExtension = ".cpp";
-		//} else 
-		if(args[1].equalsIgnoreCase("pseudo")){
+		if(args[1].equalsIgnoreCase("java")){
+				toWrite = new JavaWriter();
+				fileExtension = ".java";
+		} else if(args[1].equalsIgnoreCase("c++")){
+				toWrite = new CPlusPlusWriter();
+				fileExtension = ".cpp";
+		} else if(args[1].equalsIgnoreCase("pseudo")){
 				toWrite = new PseudoWriter();
 				fileExtension = ".txt";
 		} else {
@@ -55,7 +54,6 @@ public class CodeGenerator{
 			boolean isValidType, getter, setter;
 			String accessModifier;
 			for(int i = 0; i<=classArray.length()-1;i++){
-				System.out.println("On Class "+(i+1));
 				currentClass = classArray.getJSONObject(i);
 				//Check for properly formated class name and access modifier
 				if(currentClass.has("className") && currentClass.has("accessModifier")){
@@ -142,7 +140,11 @@ public class CodeGenerator{
 											setter = false;
 										}
 										isError(toWrite.addField(currentField.getString("fieldType"), currentField.getString("fieldName"), accessModifier, getter, setter, modifierArray));
+									}else{
+										isError("Error: Invalid fieldType for field "+currentField.getString("fieldName")+", field skipped");
 									}
+								}else{
+									isError("Error: Invalid or missing fieldName, or missing fieldType, field skipped");
 								}
 							}
 						}
@@ -150,7 +152,6 @@ public class CodeGenerator{
 						if(currentClass.has("methods")){
 							methodArray=currentClass.getJSONArray("methods");
 							for(int j = 0; j<=methodArray.length()-1;j++){
-								System.out.println("Method"+(j+1));
 								isValidType = false;
 								currentMethod = methodArray.getJSONObject(j);
 								if(currentMethod.has("methodName") && toWrite.isValidName(currentMethod.getString("methodName")) && currentMethod.has("methodType")){
@@ -188,11 +189,21 @@ public class CodeGenerator{
 											parameters = new JSONArray();
 										}
 										isError(toWrite.addMethod(currentMethod.getString("methodType"), currentMethod.getString("methodName"), accessModifier, parameters, classArray, modifierArray));
+									}else{
+										isError("Error: Invalid methodType for method "+currentMethod.getString("methodName")+", method skipped");
 									}
+								}else{
+									isError("Error: Invalid or missing methodName, or missing methodType, method skipped");
 								}
 							}
 						}
+						
+						toWrite.classEnd();
+					}else{
+						isError("Error: Invalid className or accessModifier, class skipped.");
 					}
+				}else{
+					isError("Error: Missing className or accessModifier, class skipped.");
 				}
 				toWrite.classEnd();
 			}
@@ -200,12 +211,11 @@ public class CodeGenerator{
 			output = toWrite.getCode();
 			try{
 			File file = new File (".//codegen//output//"+args[0]+fileExtension);
-			System.out.println(output);
 			FileWriter fileWriter = new FileWriter(file);
 			fileWriter.write(output);
 			fileWriter.close();
 			}catch(java.io.IOException e){
-				System.err.println("File could not be written to");
+				isError("Error: File could not be written to");
 			}
 		}
 	}

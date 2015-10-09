@@ -184,6 +184,6 @@ public class PseudoWriter implements CodeWriter{
 				}
 			}
 			functions += ");\n\n";
-			return functions;
+			return "success";
 		}
 }
